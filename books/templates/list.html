@@ -1,0 +1,17 @@
+<<!DOCTYPE html>
+<html>
+{% load humanize %}
+<head>
+	<title>Django</title>
+</head>
+<body>
+<p>Hi {{ request.user.username }}. You last logged in at {{ request.user.last_login }}</p>
+
+<h1>{{ books.count|apnumber|title }} book{{ books.count|pluralize }}</h1>
+{% for book in books %}
+	<h2>{{ book.title }} by {{ book.list_authors }}</h2>
+	{% if book.is_favourite %}favorite{% endif %}
+	{{ book.review }}
+{% endfor %}
+</body>
+</html>

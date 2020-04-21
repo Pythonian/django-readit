@@ -1,0 +1,43 @@
+{% block content %}
+<h1>Books pending review</h1>
+
+{% if books %}
+	<table>
+		<thead>
+			<th>Title &amp; Author</th>
+			<th>Assigned To</th>
+			<th>Action</th>
+		</thead>
+
+		<tbody>
+			{% for book in books %}
+			<tr>
+				<td>{{ book.title }} by {{ book.list_authors }}</td>
+				<td>
+					{% if book.reviewed_by == request.user %}
+						Me!
+					{% elif book.reviewed_by %}
+						{{ book.reviewed_by.get_full_name|default:book.reviewed_by.username }}
+					{% else %}
+						-
+					{% endif %}
+				</td>
+				<td><a href="{% url 'review-book' book.pk %}">Review</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+
+	</table>
+{% else %}
+	<p>There are no books waiting to be reviewed.</p>
+{% endif %}
+
+<h2>Request a new review</h2>
+
+<form method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit">Add Book</button>
+</form>
+
+{% endblock %}
